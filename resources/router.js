@@ -3,11 +3,12 @@ import EditTask from './js/components/EditTask.vue'; // Import EditTask componen
 import TaskList from './js/components/TaskList.vue';
 import AddTask from './js/components/AddTask.vue';
 import DeleteTask from './js/components/DeleteTask.vue';
+import NotFound from './js/components/NotFound.vue';
 
 const routes = [
     {
       path: '/',
-      component: TaskList, // Assuming ListTask component for task listing
+      component: AddTask, // Assuming ListTask component for task listing
     },
     {
       path: '/tasks',
@@ -20,22 +21,25 @@ const routes = [
       ],
     },
     {
-      path: '/tasks/:taskId/edit',
+      path: '/tasks/:taskId',
       component: EditTask,
       props: true, // Pass task ID as prop to EditTask
     },
     {
-      path: '/tasks/:taskId/delete', // Route for deleting a task
+      path: '/tasks/:taskId', // Route for deleting a task
       component: DeleteTask, // Assuming DeleteTask component for deletion confirmation/handling
       props: true, // Pass task ID as prop to DeleteTask
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound
+    },
   ];
   
-
-
 const router = createRouter({
   history: createWebHistory(), // Assuming you want browser-like history mode
-  routes,
+  routes: routes
 });
 
 export  default router;

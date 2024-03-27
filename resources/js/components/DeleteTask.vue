@@ -8,7 +8,13 @@
   
   <script>
   export default {
-    props: ['taskId'],
+    // props: ['taskId'],
+    props: {
+    taskId: {
+      type: Number,
+      required: true
+    }
+  },
     data() {
       return {
         showConfirm: false,

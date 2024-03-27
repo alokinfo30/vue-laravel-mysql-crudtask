@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-task">
+    <div class="edit-task" v-if="task">
       <h2>Edit Task</h2>
       <form @submit.prevent="updateTask">
         <div class="form-group">
@@ -22,28 +22,54 @@
   import axios from 'axios';
   
   export default {
-    props: ['taskId'], // Get task ID from route parameter
+    // props: ['taskId'], // Get task ID from route parameter
+    props: {
+    taskId: {
+      type: Number,
+      required: true
+    }
+  },
+  // props: {
+  //   taskId: Number, // Specify type as Number (optional)
+  // },
     data() {
       return {
         task: {},
       };
     },
     created() {
-      this.fetchTask();
+    
+      
+      const taskId = this.$route.params.taskId;
+      if (!taskId) {
+    this.$router.push({ name: 'task-list' }); // Redirect to task list
+    return;
+  }else{
+    this.getTask(this.$route.params.taskId);
+  }
+
     },
+    // mounted(){
+    //    console.log(this.$route.params.taskId);
+      
+    //   //this.getTask(this.$route.params.taskId);
+    // },
     methods: {
-      async fetchTask() {
+      async getTask(taskID) {      
         try {
-          const response = await axios.get(`/tasks/${this.taskId}`);
+          const response = await axios.get(`/tasks/${taskID}`);
           this.task = response.data;
+          // console.log(this.task);
         } catch (error) {
           console.error('Error fetching task:', error);
         }
       },
       async updateTask() {
         try {
-          const response = await axios.put(`/tasks/${this.taskId}`, this.task);
+          const response = await axios.put(`/tasks/${this.task.id}`, this.task);
           this.$emit('taskUpdated', response.data); // Emit event for updating the task list
+          console.log(response.data);
+
         } catch (error) {
           console.error('Error updating task:', error);
         }
